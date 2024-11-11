@@ -1,0 +1,26 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from google.colab import drive
+
+# Mount Google Drive if using Colab
+drive.mount('/content/drive')
+
+# Load the CIC dataset
+data = pd.read_csv('/content/drive/MyDrive/Data/cicddos2019_dataset.csv')
+
+# Separate features and target
+X = data.drop(['Class'], axis=1)  # replace 'Class' with the actual target column name if different
+y = data['Class']
+
+# Perform stratified split: 75% for training and 25% for testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+
+# Combine back to create training and testing dataframes if needed
+train_data = pd.concat([X_train, y_train], axis=1)
+test_data = pd.concat([X_test, y_test], axis=1)
+
+# Save the split datasets to CSV
+train_data.to_csv('/content/drive/MyDrive/Data/train_data.csv', index=False)
+test_data.to_csv('/content/drive/MyDrive/Data/test_data.csv', index=False)
+
+print("Training and testing data have been split and saved.")
